@@ -134,8 +134,18 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const rect1Height = rect1.top + rect1.height;
+  const rect1Width = rect1.left + rect1.width;
+  const rect2Height = rect2.top + rect2.height;
+  const rect2Width = rect2.left + rect2.width;
+  if (rect1.left < rect2Width
+    && rect1Width > rect2.left
+    && rect1.top < rect2Height
+    && rect1Height > rect2.top) {
+    return true;
+  }
+  return false;
 }
 
 

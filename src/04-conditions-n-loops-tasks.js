@@ -165,8 +165,11 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  const distanceX = circle.center.x - point.x;
+  const distanceY = circle.center.y - point.y;
+  const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+  return distance < circle.radius;
 }
 
 
@@ -357,8 +360,27 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const brackets = {
+    ')': '(',
+    ']': '[',
+    '}': '{',
+    '>': '<',
+  };
+  // collect brackets
+  const fifo = [];
+  for (let i = 0; i < str.length; i += 1) {
+    const item = str[i];
+    if (Object.values(brackets).includes(item)) {
+      fifo.push(item);
+    } else {
+      const fifoLast = fifo.pop();
+      if (fifoLast !== brackets[item]) {
+        return false;
+      }
+    }
+  }
+  return fifo.length === 0;
 }
 
 
@@ -382,8 +404,14 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  let out = '';
+  let number = num;
+  while (number > 0) {
+    out = (number % n) + out;
+    number = Math.floor(number / n);
+  }
+  return out || '0';
 }
 
 
@@ -399,8 +427,18 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let commonPath = '';
+  const splitPaths = pathes.map((path) => path.split('/'));
+  for (let i = 0; i < splitPaths[0].length; i += 1) {
+    const segment = splitPaths[0][i];
+    if (splitPaths.every((path) => path[i] === segment)) {
+      commonPath += `${segment}/`;
+    } else {
+      break;
+    }
+  }
+  return commonPath;
 }
 
 
@@ -422,8 +460,19 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const rowsM1 = m1.length;
+  const colsM1 = m1[0].length;
+  const colsM2 = m2[0].length;
+  const result = new Array(rowsM1).fill(0).map(() => new Array(colsM2).fill(0));
+  for (let i = 0; i < rowsM1; i += 1) {
+    for (let j = 0; j < colsM2; j += 1) {
+      for (let k = 0; k < colsM1; k += 1) {
+        result[i][j] += m1[i][k] * m2[k][j];
+      }
+    }
+  }
+  return result;
 }
 
 
